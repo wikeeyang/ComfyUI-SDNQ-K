@@ -1,5 +1,5 @@
 ## ComfyUI-SDNQ
 SDNQ support for ComfyUI.
-requires [SDNQ](https://github.com/Disty0/sdnq) `pip install git+https://github.com/Disty0/sdnq`.
+requires my own re-implementation of SDNQ with HQQ weight selection: `pip install git+https://github.com/kanttouchthis/hqqsvd`.
 
 [Models](https://huggingface.co/collections/kanttouchthis/comfyui-sdnq-models)
