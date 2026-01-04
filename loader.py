@@ -23,12 +23,12 @@ logger = logging.getLogger(__name__)
 def replace_linear(model, new_sd, compute_dtype, prefix=""):
     for name, module in model.named_children():
         if (f"{prefix}.{name}.svd_up") in new_sd:
-            W_q = new_sd.pop(f"{prefix}.{name}.weight").cuda()
-            svd_up = new_sd.pop(f"{prefix}.{name}.svd_up").cuda()
-            svd_down = new_sd.pop(f"{prefix}.{name}.svd_down").cuda()
-            zero_point = new_sd.pop(f"{prefix}.{name}.zero_point").cuda()
-            bias = new_sd.pop(f"{prefix}.{name}.bias").cuda()
-            scale = new_sd.pop(f"{prefix}.{name}.scale").cuda()
+            W_q = new_sd.pop(f"{prefix}.{name}.weight").to("cuda")
+            svd_up = new_sd.pop(f"{prefix}.{name}.svd_up").to("cuda", compute_dtype)
+            svd_down = new_sd.pop(f"{prefix}.{name}.svd_down").to("cuda", compute_dtype)
+            zero_point = new_sd.pop(f"{prefix}.{name}.zero_point").to("cuda", compute_dtype)
+            bias = new_sd.pop(f"{prefix}.{name}.bias").to("cuda", compute_dtype)
+            scale = new_sd.pop(f"{prefix}.{name}.scale").to("cuda", compute_dtype)
             nbits = new_sd.pop(f"{prefix}.{name}.nbits", torch.tensor([4]))
             # remove legacy shape
             if new_sd.pop(f"{prefix}.{name}.shape", None) is not None:
