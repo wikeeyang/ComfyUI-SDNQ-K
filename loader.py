@@ -64,7 +64,7 @@ class CustomPatcher(comfy.model_patcher.ModelPatcher):
         inplace_update = self.weight_inplace_update or inplace_update
 
         if weight.dtype == torch.uint8:
-            sdnq_linear = self.model.get_submodule(key.rstrip(".weight"))
+            sdnq_linear = self.model.get_submodule(key.replace(".weight", ""))
             for i, p in enumerate(self.patches[key]):
                 k = f"{key}|{i}"
                 lora = ComfyLora(k, p, comfy.lora.calculate_weight)
