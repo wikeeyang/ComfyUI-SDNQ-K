@@ -31,7 +31,10 @@ def replace_linear(model, new_sd, compute_dtype, int8_matmul, prefix=""):
             svd_up = new_sd.pop(f"{prefix}.{name}.svd_up").to("cuda", compute_dtype)
             svd_down = new_sd.pop(f"{prefix}.{name}.svd_down").to("cuda", compute_dtype)
             zero_point = new_sd.pop(f"{prefix}.{name}.zero_point").to("cuda", compute_dtype)
-            bias = new_sd.pop(f"{prefix}.{name}.bias").to("cuda", compute_dtype)
+            if f"{prefix}.{name}.bias" in new_sd:
+                bias = new_sd.pop(f"{prefix}.{name}.bias").to("cuda", compute_dtype)
+            else:
+                bias = None
             scale = new_sd.pop(f"{prefix}.{name}.scale").to("cuda", compute_dtype)
             nbits = new_sd.pop(f"{prefix}.{name}.nbits", torch.tensor([4]))
             # remove legacy shape
