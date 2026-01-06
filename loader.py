@@ -30,9 +30,10 @@ def replace_linear(model, new_sd, compute_dtype, int8_matmul, prefix=""):
             out_features, in_features = module.weight.shape
             svd_rank = new_sd[base + ".svd_up"].shape[1]
             n_groups = new_sd[base + ".scale"].shape[1]
-            nbits = new_sd[base + ".nbits"].item()
+            nbits = new_sd[base+".nbits"] = new_sd.get(base+"nbits", torch.tensor((4,)))
+            new_sd.pop(base + ".shape", None)
             bias = (base + ".bias") in new_sd
-            sdnq_linear = HQQSVDLinear(in_features, out_features, svd_rank, n_groups, nbits, int8_matmul, bias, "cuda", dtype=compute_dtype)
+            sdnq_linear = HQQSVDLinear(in_features, out_features, svd_rank, n_groups, nbits.item(), int8_matmul, bias, "cuda", dtype=compute_dtype)
             setattr(model, name, sdnq_linear)
             torch.cuda.empty_cache()
         else:
